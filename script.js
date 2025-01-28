@@ -1,74 +1,38 @@
-// Store user answers
-let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || {};
+const questions = [
+  {
+    question: "What is the capital of France?",
+    choices: ["Paris", "London", "Berlin", "Madrid"],
+    answer: "Paris",
+  },
+  {
+    question: "What is the highest mountain in the world?",
+    choices: ["Everest", "Kilimanjaro", "Denali", "Matterhorn"],
+    answer: "Everest",
+  },
+  // Add more questions as needed
+];
 
-// Display questions on the page
+// Ensure questions is an array before rendering
 function renderQuestions() {
-  const questionsElement = document.getElementById("questions");
-  questionsElement.innerHTML = ""; // Clear previous content
+  if (!Array.isArray(questions)) {
+    throw new TypeError("Expected `questions` to be an array.");
+  }
 
+  const questionsElement = document.getElementById("questions");
   questions.forEach((question, index) => {
     const questionElement = document.createElement("div");
-
-    // Add question text
-    const questionText = document.createElement("h3");
-    questionText.textContent = `${index + 1}. ${question.question}`;
-    questionElement.appendChild(questionText);
-
-    // Add choices
+    questionElement.innerHTML = `<h3>${index + 1}. ${question.question}</h3>`;
     question.choices.forEach((choice) => {
-      const choiceContainer = document.createElement("div");
-
-      const choiceElement = document.createElement("input");
-      choiceElement.type = "radio";
-      choiceElement.name = `question-${index}`;
-      choiceElement.value = choice;
-
-      // Check if the choice was previously selected
-      if (userAnswers[index] === choice) {
-        choiceElement.checked = true;
-      }
-
-      // Save progress when a choice is selected
-      choiceElement.addEventListener("change", () => {
-        userAnswers[index] = choice;
-        sessionStorage.setItem("progress", JSON.stringify(userAnswers));
-      });
-
-      const choiceLabel = document.createElement("label");
-      choiceLabel.textContent = choice;
-
-      choiceContainer.appendChild(choiceElement);
-      choiceContainer.appendChild(choiceLabel);
-
-      questionElement.appendChild(choiceContainer);
+      const choiceHtml = `
+        <div>
+          <input type="radio" name="question-${index}" value="${choice}">
+          <label>${choice}</label>
+        </div>`;
+      questionElement.innerHTML += choiceHtml;
     });
-
     questionsElement.appendChild(questionElement);
   });
 }
 
-// Calculate and display the score
-function calculateScore() {
-  let score = 0;
-
-  questions.forEach((question, index) => {
-    if (userAnswers[index] === question.answer) {
-      score++;
-    }
-  });
-
-  // Display the score
-  const scoreElement = document.getElementById("score");
-  scoreElement.textContent = `Your score is ${score} out of ${questions.length}.`;
-
-  // Store the score in local storage
-  localStorage.setItem("score", score);
-}
-
-// Add event listener to the Submit button
-document.getElementById("submit").addEventListener("click", () => {
-  calculateScore();
-});
-
-// Render questions when the page loads
+// Call renderQuestions after ensuring `questions` is loaded
 renderQuestions();
