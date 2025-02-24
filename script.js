@@ -12,7 +12,7 @@ const questions = [
   },
   {
     question: "What is the largest country by area?",
-    choices: ["Russia", "India", "China", "Japan"],
+    choices: ["Russia", "Canada", "China", "USA"],
     answer: "Russia",
   },
   {
@@ -58,67 +58,4 @@ function renderQuestions() {
         progress[`question-${index}`] === choice ? 'checked="true"' : "";
       const choiceHtml = `
         <div>
-          <input type="radio" name="question-${index}" value="${choice}" ${isChecked}>
-          <label>${choice}</label>
-        </div>`;
-      questionDiv.innerHTML += choiceHtml;
-    });
-    // Append the current question block to the container
-    questionsElement.appendChild(questionDiv);
-  });
-}
-
-// Render the questions when the page loads.
-renderQuestions();
-
-// Listen for changes on any radio button to update session storage
-document.getElementById("questions").addEventListener("change", function (event) {
-  if (event.target.matches("input[type='radio']")) {
-    const name = event.target.name; // e.g., "question-0"
-    const value = event.target.value; // Selected answer
-
-    // Retrieve any saved progress from sessionStorage
-    let progress = {};
-    if (sessionStorage.getItem("progress")) {
-      progress = JSON.parse(sessionStorage.getItem("progress"));
-    }
-
-    // Save the user's selection for this question
-    progress[name] = value;
-    sessionStorage.setItem("progress", JSON.stringify(progress));
-  }
-});
-
-// On page load, if a final score exists in localStorage, display it.
-if (localStorage.getItem("score") !== null) {
-  document.getElementById("score").textContent =
-    `Your score is ${localStorage.getItem("score")} out of ${questions.length}.`;
-}
-
-// Add an event listener to the Submit button to calculate and display the final score.
-document.getElementById("submit").addEventListener("click", function () {
-  // Retrieve user's answers from sessionStorage
-  let progress = {};
-  if (sessionStorage.getItem("progress")) {
-    progress = JSON.parse(sessionStorage.getItem("progress"));
-  }
-
-  // Initialize the score counter
-  let score = 0;
-  // Check each question's answer against the user's selection
-  questions.forEach((question, index) => {
-    if (
-      progress[`question-${index}`] &&
-      progress[`question-${index}`] === question.answer
-    ) {
-      score++;
-    }
-  });
-
-  // Display the score in the designated score element
-  document.getElementById("score").textContent =
-    `Your score is ${score} out of ${questions.length}.`;
-
-  // Save the final score in localStorage
-  localStorage.setItem("score", score);
-});
+          <
