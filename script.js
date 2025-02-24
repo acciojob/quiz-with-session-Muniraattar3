@@ -16,9 +16,9 @@ const questions = [
     answer: "Russia",
   },
   {
-    question: "Which planet is known as the Red Planet?",
+    question: "Which is the largest planet in our solar system?",
     choices: ["Earth", "Mars", "Venus", "Jupiter"],
-    answer: "Mars",
+    answer: "Jupiter",
   },
   {
     question: "What is the smallest prime number?",
