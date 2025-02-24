@@ -12,7 +12,7 @@ const questions = [
   },
   {
     question: "What is the largest country by area?",
-    choices: ["Russia", "China", "Canada", "USA"],
+    choices: ["Russia", "China", "Canada", "United States"],
     answer: "Russia",
   },
   {
