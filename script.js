@@ -1,4 +1,4 @@
-// Array of 5 quiz questions with their answer choices and correct answer
+// Array of 5 quiz questions with their choices and correct answer
 const questions = [
   {
     question: "What is the capital of France?",
@@ -27,47 +27,43 @@ const questions = [
   },
 ];
 
-// Function to render all questions and their answer options
+// Function to render quiz questions and options
 function renderQuestions() {
-  // Check if questions is an array, otherwise throw an error.
+  // Ensure questions is an array
   if (!Array.isArray(questions)) {
     throw new TypeError("Expected `questions` to be an array.");
   }
 
-  // Try to retrieve any saved answers from sessionStorage.
+  // Retrieve saved progress from sessionStorage (if any)
   let progress = {};
   if (sessionStorage.getItem("progress")) {
     progress = JSON.parse(sessionStorage.getItem("progress"));
   }
 
-  // Get the container element where questions will be displayed.
+  // Get the container element for the questions
   const questionsElement = document.getElementById("questions");
-  questionsElement.innerHTML = ""; // Clear any existing content.
+  questionsElement.innerHTML = ""; // Clear previous content
 
-  // Loop through each question in the questions array.
+  // Loop through each question
   questions.forEach((question, index) => {
-    // Create a div element for the current question.
     const questionDiv = document.createElement("div");
+    // Display only the question text without numbering
+    questionDiv.innerHTML = `<h3>${question.question}</h3>`;
 
-    // Add the question text inside an <h3> tag.
-    questionDiv.innerHTML = `<h3>${index + 1}. ${question.question}</h3>`;
-
-    // Loop through each answer choice.
+    // Loop through each choice for the current question
     question.choices.forEach((choice) => {
-      // If the user previously selected an answer for this question,
-      // check if this choice is the saved answer.
-      const isChecked = progress[`question-${index}`] === choice ? "checked" : "";
-      // Build the HTML for each radio button and its label.
+      // If the saved answer for this question equals this choice,
+      // mark the radio button as checked using checked="true"
+      const isChecked =
+        progress[`question-${index}`] === choice ? 'checked="true"' : "";
       const choiceHtml = `
         <div>
           <input type="radio" name="question-${index}" value="${choice}" ${isChecked}>
           <label>${choice}</label>
-        </div>
-      `;
-      // Append the radio button HTML to the questionDiv.
+        </div>`;
       questionDiv.innerHTML += choiceHtml;
     });
-    // Append the complete question block to the questions container.
+    // Append the current question block to the container
     questionsElement.appendChild(questionDiv);
   });
 }
@@ -75,55 +71,54 @@ function renderQuestions() {
 // Render the questions when the page loads.
 renderQuestions();
 
-// Use event delegation on the questions container to save progress when a radio button is changed.
-document.getElementById("questions").addEventListener("change", function(event) {
-  // Check if the changed element is a radio button.
+// Listen for changes on any radio button to update session storage
+document.getElementById("questions").addEventListener("change", function (event) {
   if (event.target.matches("input[type='radio']")) {
-    const name = event.target.name; // For example, "question-0"
-    const value = event.target.value; // The choice selected by the user
+    const name = event.target.name; // e.g., "question-0"
+    const value = event.target.value; // Selected answer
 
-    // Retrieve any previously saved progress from sessionStorage.
+    // Retrieve any saved progress from sessionStorage
     let progress = {};
     if (sessionStorage.getItem("progress")) {
       progress = JSON.parse(sessionStorage.getItem("progress"));
     }
 
-    // Save the user's answer for this question.
+    // Save the user's selection for this question
     progress[name] = value;
-    // Store the updated progress object back into sessionStorage.
     sessionStorage.setItem("progress", JSON.stringify(progress));
   }
 });
 
-// When the page loads, if a score is stored in localStorage, display it.
+// On page load, if a final score exists in localStorage, display it.
 if (localStorage.getItem("score") !== null) {
   document.getElementById("score").textContent =
     `Your score is ${localStorage.getItem("score")} out of ${questions.length}.`;
 }
 
 // Add an event listener to the Submit button to calculate and display the final score.
-document.getElementById("submit").addEventListener("click", function() {
-  // Retrieve the user's progress (answers) from sessionStorage.
+document.getElementById("submit").addEventListener("click", function () {
+  // Retrieve user's answers from sessionStorage
   let progress = {};
   if (sessionStorage.getItem("progress")) {
     progress = JSON.parse(sessionStorage.getItem("progress"));
   }
 
-  // Initialize the score counter.
+  // Initialize the score counter
   let score = 0;
-
-  // Loop through all questions to check each answer.
+  // Check each question's answer against the user's selection
   questions.forEach((question, index) => {
-    // Check if the user answered this question and if the answer is correct.
-    if (progress[`question-${index}`] && progress[`question-${index}`] === question.answer) {
+    if (
+      progress[`question-${index}`] &&
+      progress[`question-${index}`] === question.answer
+    ) {
       score++;
     }
   });
 
-  // Display the final score in the score div.
+  // Display the score in the designated score element
   document.getElementById("score").textContent =
     `Your score is ${score} out of ${questions.length}.`;
 
-  // Save the final score in localStorage under the key "score".
+  // Save the final score in localStorage
   localStorage.setItem("score", score);
 });
