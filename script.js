@@ -21,9 +21,9 @@ const questions = [
     answer: "Jupiter",
   },
   {
-    question: "What is the smallest prime number?",
-    choices: ["0", "1", "2", "3"],
-    answer: "2",
+    question: "What is the capital of Canada?",
+    choices: ["Ottawa", "Toronto", "Vancouver", "Montreal"],
+    answer: "Ottawa",
   },
 ];
 
