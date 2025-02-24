@@ -11,9 +11,9 @@ const questions = [
     answer: "Everest",
   },
   {
-    question: "What is the largest ocean in the world?",
-    choices: ["Pacific", "Atlantic", "Indian", "Arctic"],
-    answer: "Pacific",
+    question: "What is the largest country by area?",
+    choices: ["Russia", "India", "China", "Japan"],
+    answer: "Russia",
   },
   {
     question: "Which planet is known as the Red Planet?",
